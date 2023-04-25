@@ -49,6 +49,7 @@ class AuthController extends BaseController {
             /** @var \App\Models\User $user */
             $success['token'] =  $user->createToken('MyApp')->plainTextToken;
             $success['name'] =  $user->name;
+            $success['id'] =  $user->id;
 
             return $this->sendResponse($success, 'User login successful.');
         } else {

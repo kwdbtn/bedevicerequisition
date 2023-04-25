@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\DeviceRequestResource;
-use App\Models\DeviceRequest;
+use Carbon\Carbon;
+use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\DeviceRequest;
+use App\Http\Resources\DeviceRequestResource;
 
 class DeviceRequestController extends Controller {
     /**
@@ -16,10 +18,32 @@ class DeviceRequestController extends Controller {
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Display a listing of the resource.
      */
-    public function create() {
-        //
+    public function expired() {
+        $deviceRequests = DeviceRequest::all();
+        $expiredRequests = collect([]);
+
+        foreach ($deviceRequests as $deviceRequest) {
+            $futureDate = Carbon::parse($deviceRequest->created_at)->addYears(2);
+
+            if (Carbon::parse($futureDate)->lessThanOrEqualTo(Carbon::now())) {
+                $expiredRequests->push($deviceRequest);
+                $deviceRequest->update([
+                    'status' => 'Expired'
+                ]);
+            }
+        }
+
+        return DeviceRequestResource::collection($expiredRequests);
+    }
+
+    /**
+     * Display a listing of a user's resource.
+     */
+    public function user(User $user) {
+        $deviceRequests = DeviceRequest::where('user_id', $user->id)->get();
+        return DeviceRequestResource::collection($deviceRequests);
     }
 
     /**
