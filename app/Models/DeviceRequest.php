@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class DeviceRequest extends Model {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'device', 'model', 'specifications', 'device_bought', 'serial_number', 'code', 'status'];
+    protected $fillable = ['user_id', 'device', 'model', 'specifications', 'device_bought', 'serial_number', 'code', 'status', 'purchase_date'];
 
     public function user() {
         return $this->belongsTo(User::class);

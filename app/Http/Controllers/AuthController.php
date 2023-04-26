@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class AuthController extends BaseController {
+
+    public function username() {
+        return 'username';
+    }
     /**
      * Register api
      *
@@ -50,8 +54,9 @@ class AuthController extends BaseController {
             $success['token'] =  $user->createToken('MyApp')->plainTextToken;
             $success['name'] =  $user->name;
             $success['id'] =  $user->id;
+            $success['jobTitle'] = $user->job_title;
 
-            return $this->sendResponse($success, 'User login successful.');
+            return $this->sendResponse($success, 'User login successful');
         } else {
             return $this->sendError('Unauthorised.', ['error' => 'Unauthorised']);
         }
