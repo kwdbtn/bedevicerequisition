@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\DeviceRequest;
 use App\Http\Resources\DeviceRequestResource;
+use App\Http\Resources\UserResource;
 
 class DeviceRequestController extends Controller {
     /**
@@ -25,9 +26,10 @@ class DeviceRequestController extends Controller {
         $expiredRequests = collect([]);
 
         foreach ($deviceRequests as $deviceRequest) {
-            $futureDate = Carbon::parse($deviceRequest->created_at)->addYears(2);
+            $futureDate = Carbon::parse($deviceRequest->purchased_date)->addYears(2);
 
             if (Carbon::parse($futureDate)->lessThanOrEqualTo(Carbon::now())) {
+                dd('in here');
                 $expiredRequests->push($deviceRequest);
                 $deviceRequest->update([
                     'status' => 'Expired'
@@ -35,7 +37,7 @@ class DeviceRequestController extends Controller {
             }
         }
 
-        return DeviceRequestResource::collection($expiredRequests);
+        // return DeviceRequestResource::collection($expiredRequests);
     }
 
     /**
@@ -59,9 +61,18 @@ class DeviceRequestController extends Controller {
             'serial_number' => $request->serial_number,
             'code' => $request->code,
             'status' => $request->status,
+            'purchase_date' => $request->purchase_date
         ]);
 
         return new DeviceRequestResource($deviceRequest);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function users(Request $request) {
+        $users = User::where('job_title', 'Manager')->orWhere('job_title', 'Director')->get();
+        return UserResource::collection($users);
     }
 
     /**

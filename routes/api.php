@@ -30,3 +30,4 @@ Route::get('device-requests', [DeviceRequestController::class, 'index']);
 Route::post('device-requests', [DeviceRequestController::class, 'store']);
 Route::get('device-requests/expired', [DeviceRequestController::class, 'expired']);
 Route::get('device-requests/{user}', [DeviceRequestController::class, 'user']);
+Route::get('users', [DeviceRequestController::class, 'users']);

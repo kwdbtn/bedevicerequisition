@@ -22,7 +22,7 @@ class DeviceRequestResource extends JsonResource {
             'serial_number' => $this->serial_number,
             'code' => $this->code,
             'status' => $this->status,
-            'purchase_date' => $this->purchase_date->toFormattedDateString(),
+            'purchase_date' => $this->purchase_date,
             'request_date' => $this->created_at->toFormattedDateString(),
         ];
     }

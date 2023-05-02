@@ -19,7 +19,7 @@ return new class extends Migration {
             $table->string('serial_number')->nullable();
             $table->string('code')->nullable();
             $table->string('status')->nullable();
-            $table->date('purhase_date')->nullable();
+            $table->datetime('purchase_date')->nullable();
             $table->timestamps();
         });
     }
@@ -29,5 +29,5 @@ return new class extends Migration {
      */
     public function down(): void {
         Schema::dropIfExists('device_requests');
-    }
+    }0
 };
