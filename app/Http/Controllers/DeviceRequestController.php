@@ -26,10 +26,9 @@ class DeviceRequestController extends Controller {
         $expiredRequests = collect([]);
 
         foreach ($deviceRequests as $deviceRequest) {
-            $futureDate = Carbon::parse($deviceRequest->purchased_date)->addYears(2);
+            $futureDate = Carbon::parse($deviceRequest->receipt_date)->addYears(2);
 
             if (Carbon::parse($futureDate)->lessThanOrEqualTo(Carbon::now())) {
-                dd('in here');
                 $expiredRequests->push($deviceRequest);
                 $deviceRequest->update([
                     'status' => 'Expired'
@@ -37,7 +36,7 @@ class DeviceRequestController extends Controller {
             }
         }
 
-        // return DeviceRequestResource::collection($expiredRequests);
+        return DeviceRequestResource::collection($expiredRequests);
     }
 
     /**
@@ -59,9 +58,10 @@ class DeviceRequestController extends Controller {
             'specifications' => $request->specifications,
             'device_bought' => $request->input('device_bought') ? true : false,
             'serial_number' => $request->serial_number,
+            'imei' => $request->imei,
             'code' => $request->code,
             'status' => $request->status,
-            'purchase_date' => $request->purchase_date
+            'receipt_date' => $request->receipt_date,
         ]);
 
         return new DeviceRequestResource($deviceRequest);
