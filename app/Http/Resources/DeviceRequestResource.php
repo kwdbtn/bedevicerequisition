@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -23,8 +24,10 @@ class DeviceRequestResource extends JsonResource {
             'imei' => $this->imei,
             'code' => $this->code,
             'status' => $this->status,
-            'receipt_date' => $this->receipt_date,
+            'receipt_date' => Carbon::parse($this->receipt_date)->toFormattedDateString(),
             'request_date' => $this->created_at->toFormattedDateString(),
+            'attachment' => $this->attachment,
+            'assistant_id' => $this->assistant_id,
         ];
     }
 }

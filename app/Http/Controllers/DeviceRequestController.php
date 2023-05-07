@@ -51,6 +51,11 @@ class DeviceRequestController extends Controller {
      * Store a newly created resource in storage.
      */
     public function store(Request $request) {
+        $username = User::find($request->user_id)->name;
+        $fileAttach     = $request->file('attachment');
+        $filenameAttach = 'Receipt - ' . $username . ' '  . time() . '.' . $fileAttach->getClientOriginalExtension();
+        $pathLog     = $fileAttach->storeAs('Receipts', $filenameAttach);
+
         $deviceRequest = DeviceRequest::create([
             'user_id' => $request->user_id,
             'device' => $request->device,
@@ -62,6 +67,8 @@ class DeviceRequestController extends Controller {
             'code' => $request->code,
             'status' => $request->status,
             'receipt_date' => $request->receipt_date,
+            'attachment' => $pathLog,
+            'assistant_id' => $request->assistant_id,
         ]);
 
         return new DeviceRequestResource($deviceRequest);
@@ -73,6 +80,16 @@ class DeviceRequestController extends Controller {
     public function users(Request $request) {
         $users = User::where('job_title', 'Manager')->orWhere('job_title', 'Director')->get();
         return UserResource::collection($users);
+    }
+
+    public function mine(User $user) {
+        $deviceRequests = DeviceRequest::where('user_id', $user->id)->get();
+        return DeviceRequestResource::collection($deviceRequests);
+    }
+
+    public function onbehalf(User $user) {
+        $deviceRequests = DeviceRequest::where('assistant_id', $user->id)->get();
+        return DeviceRequestResource::collection($deviceRequests);
     }
 
     /**

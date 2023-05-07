@@ -21,6 +21,8 @@ return new class extends Migration {
             $table->string('code')->nullable();
             $table->string('status')->nullable();
             $table->date('receipt_date')->nullable();
+            $table->string('attachment')->nullable();
+            $table->integer('assistant_id')->unsigned()->nullable();
             $table->timestamps();
         });
     }
